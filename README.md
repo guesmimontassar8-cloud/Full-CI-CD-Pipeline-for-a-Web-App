@@ -1,23 +1,21 @@
 # CI/CD Web App Pipeline
 
 A small Node.js/Express app with a complete GitHub Actions pipeline demonstrating
-lint → test → Docker build → push to GitHub Container Registry (GHCR) → deploy.
+lint → test → Docker build → push to GitHub Container Registry (GHCR) → automated deploy to Render.
 
-![CI/CD Pipeline](https://github.com/YOUR_USERNAME/cicd-webapp-pipeline/actions/workflows/ci-cd.yml/badge.svg)
+![CI/CD Pipeline](https://github.com/guesmimontassar8-cloud/Full-CI-CD-Pipeline-for-a-Web-App/actions/workflows/ci-cd.yml/badge.svg)
+
+🔗 **Live demo:** https://full-ci-cd-pipeline-for-a-web-app.onrender.com
 
 ## Architecture
-
-```
-push/PR --> lint --> test --> build & push Docker image (main only) --> deploy
-```
 
 - **Lint**: ESLint checks code style on every push and PR.
 - **Test**: Jest + Supertest run unit tests against the Express app.
 - **Build & Push**: On merge to `main`, a Docker image is built and pushed to
-  `ghcr.io/YOUR_USERNAME/cicd-webapp-pipeline`, tagged with both the short commit
-  SHA and `latest`.
-- **Deploy**: Placeholder step you can wire up to Render, Railway, Fly.io, or a
-  self-hosted server.
+  `ghcr.io/guesmimontassar8-cloud/full-ci-cd-pipeline-for-a-web-app`, tagged with both
+  the short commit SHA and `latest`.
+- **Deploy**: On merge to `main`, a Render deploy hook is triggered automatically,
+  redeploying the live app with the latest code.
 
 ## Tech stack
 
@@ -27,6 +25,7 @@ push/PR --> lint --> test --> build & push Docker image (main only) --> deploy
 - Docker
 - GitHub Actions
 - GitHub Container Registry (GHCR)
+- Render (hosting)
 
 ## Running locally
 
@@ -49,8 +48,12 @@ docker run -p 3000:3000 cicd-webapp-pipeline
 1. Push this repo to GitHub.
 2. Go to **Settings → Actions → General → Workflow permissions** and enable
    "Read and write permissions" so the workflow can push to GHCR.
-3. Push to `main` and watch the **Actions** tab run the pipeline.
-4. Your image will appear under your GitHub profile's **Packages** tab.
-5. (Optional) Add a deploy hook secret (e.g. `RENDER_DEPLOY_HOOK`) in
-   **Settings → Secrets and variables → Actions** and uncomment the deploy step
-   in `.github/workflows/ci-cd.yml`.
+3. Create a free Web Service on [Render](https://render.com), connecting it to
+   this repo (Render auto-detects the `Dockerfile`).
+4. Copy the Render **Deploy Hook** URL from your service's Settings tab.
+5. Add it as a GitHub secret named `RENDER_DEPLOY_HOOK` under
+   **Settings → Secrets and variables → Actions**.
+6. Push to `main` and watch the **Actions** tab run the full pipeline —
+   lint → test → build & push → deploy.
+7. Your image will appear under your GitHub profile's **Packages** tab, and
+   your live app will update automatically at your Render URL.
