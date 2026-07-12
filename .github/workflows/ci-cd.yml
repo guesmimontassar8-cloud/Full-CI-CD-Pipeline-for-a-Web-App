@@ -86,16 +86,11 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  # ---------- 4. Deploy (placeholder step) ----------
+  # ---------- 4. Deploy ----------
   deploy:
     runs-on: ubuntu-latest
     needs: build-and-push
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy notification
-        run: |
-          echo "Image pushed to ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-          echo "Add your deployment step here (Render, Railway, Fly.io, SSH to a VM, etc.)"
-      # Example for deploying to Render via a deploy hook:
-       - name: Trigger Render deploy
+      - name: Trigger Render deploy
         run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
