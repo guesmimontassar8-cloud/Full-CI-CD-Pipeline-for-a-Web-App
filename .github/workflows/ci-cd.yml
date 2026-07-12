@@ -97,5 +97,5 @@ jobs:
           echo "Image pushed to ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
           echo "Add your deployment step here (Render, Railway, Fly.io, SSH to a VM, etc.)"
       # Example for deploying to Render via a deploy hook:
-      # - name: Trigger Render deploy
-      #   run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+       - name: Trigger Render deploy
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
